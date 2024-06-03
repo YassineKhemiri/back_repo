@@ -7,7 +7,7 @@ import lombok.Value;
 
 @Value
 public class UserInfo {
-	private String id,num,address,sex,displayName, email;
+	private String id,num,address,sex,nom,prenom,email;
 	private Long cin;
 	private byte[] image;
 	private Date birth_date;

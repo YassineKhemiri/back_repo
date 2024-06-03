@@ -60,8 +60,11 @@ public class User implements Serializable {
 	@Column(columnDefinition = "BIT", length = 1)
 	private boolean enabled=false;
 
-	@Column(name = "DISPLAY_NAME")
-	private String displayName;
+	@Column(name = "NOM")
+	private String nom;
+
+	@Column(name = "PRENOM")
+	private String prenom;
 
 	@Column(name = "created_date", nullable = false, updatable = false)
 	@Temporal(TemporalType.TIMESTAMP)
@@ -86,5 +89,4 @@ public class User implements Serializable {
 	private Set<Role> roles;
 	@Column(name = "verified")
 	private Byte verified =0; // Default is 0, indicating not verified. Use other values to indicate different states.
-
 }

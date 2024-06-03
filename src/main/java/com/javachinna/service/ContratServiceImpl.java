@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ContratServiceImpl implements ContratService{
@@ -66,5 +68,23 @@ public class ContratServiceImpl implements ContratService{
             e.printStackTrace();
             throw new Exception("Failed to create payment session: " + e.getMessage(), e);
         }
+    }
+
+    /*@Override
+    public Map<Long, Long> getContratCountByProduit() {
+        List<Object[]> results = contratRepo.countContratByProduit();
+        return results.stream().collect(Collectors.toMap(
+                result -> (Long) result[0],
+                result -> (Long) result[1]
+        ));
+    }*/
+
+    @Override
+    public Map<String, Long> getContratCountByProduit() {
+        List<Object[]> results = contratRepo.countContratByProduit();
+        return results.stream().collect(Collectors.toMap(
+                result -> (String) result[0],
+                result -> (Long) result[1]
+        ));
     }
 }

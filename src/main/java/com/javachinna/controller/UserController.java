@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -44,7 +45,6 @@ public class UserController {
 	}
 
 	@GetMapping("/getUserById/{id}")
-	@PreAuthorize("hasRole('USER')")
 	public ResponseEntity<?> getUserById(@PathVariable(name = "id") Long id) {
 		return ResponseEntity.ok(userService.getUserById(id));
 	}
@@ -61,6 +61,8 @@ public class UserController {
 			}
 			byte[] imageBytes = fileImage.getBytes();
 			user1.setImage(imageBytes);
+			Date now = Calendar.getInstance().getTime();
+			user1.setModifiedDate(now);
 			userRepository.save(user1);
 			Map<String, Object> response = new HashMap<>();
 			response.put("message", "image changed successfully");
@@ -73,23 +75,7 @@ public class UserController {
 	}
 
 
-	/*@PutMapping("/changePwd")
-	public ResponseEntity<?> changePassword(@RequestParam("pwd") String pwd,@CurrentUser LocalUser user)
-	{
-		try {
-			User user1= userService.getUserById(user.getUser().getId());
-			//user.setPassword(passwordEncoder.encode(newPasswordRequest.getPassword()));
-			user1.setPassword(passwordEncoder.encode(pwd));
-			userRepository.save(user1);
-			Map<String, Object> response = new HashMap<>();
-			response.put("message", "pwd changed successfully");
-			return ResponseEntity.ok(response);  // Send JSON response
-		} catch (Exception e) {
-			Map<String, Object> response = new HashMap<>();
-			response.put("error", "Failed to change pwd: " + e.getMessage());
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);  // Send JSON response
-		}
-	}*/
+
 
 	@PutMapping("/changePwd")
 	public ResponseEntity<?> changePassword(@RequestParam("oldPwd") String oldPwd, @RequestParam("newPwd") String newPwd, @CurrentUser LocalUser user) {
@@ -101,6 +87,8 @@ public class UserController {
 				return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);  // Send JSON response
 			}
 			user1.setPassword(passwordEncoder.encode(newPwd));
+			Date now = Calendar.getInstance().getTime();
+			user1.setModifiedDate(now);
 			userRepository.save(user1);
 			Map<String, Object> response = new HashMap<>();
 			response.put("message", "Password changed successfully");
@@ -114,15 +102,18 @@ public class UserController {
 
 
 	@PutMapping("/changeData")
-	public ResponseEntity<?> changeData(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("address") String address, @RequestParam("sex") String sex, @RequestParam("date") @DateTimeFormat (pattern = "yyyy-MM-dd") Date date, @CurrentUser LocalUser user)
+	public ResponseEntity<?> changeData(@RequestParam("nom") String nom,@RequestParam("prenom") String prenom, @RequestParam("email") String email, @RequestParam("address") String address, @RequestParam("sex") String sex, @RequestParam("date") @DateTimeFormat (pattern = "yyyy-MM-dd") Date date, @CurrentUser LocalUser user)
 	{
 		try {
 			User user1= userService.getUserById(user.getUser().getId());
-			user1.setDisplayName(name);
+			user1.setNom(nom);
+			user1.setPrenom(prenom);
 			user1.setEmail(email);
 			user1.setAddress(address);
 			user1.setSex(sex);
 			user1.setBirth_date(date);
+			Date now = Calendar.getInstance().getTime();
+			user1.setModifiedDate(now);
 			userRepository.save(user1);
 			Map<String, Object> response = new HashMap<>();
 			response.put("message", "user data changed successfully");
@@ -133,6 +124,40 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);  // Send JSON response
 		}
 	}
+
+	@PutMapping("/desactiverUser")
+	public ResponseEntity<?> DesactiverUser( @CurrentUser LocalUser user){
+		try {
+			userService.desactiverUser(user.getUser());
+			Map<String, Object> response = new HashMap<>();
+			response.put("message", "user account desactivated successfully");
+			return ResponseEntity.ok(response);  // Send JSON response
+		} catch (Exception e) {
+			Map<String, Object> response = new HashMap<>();
+			response.put("error", "Failed to desactivate user account: " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);  // Send JSON response
+		}
+	}
+
+
+	@PutMapping("/reactiverUser")
+	public ResponseEntity<?> ReactiverUser(@RequestBody User user){
+		try {
+			userService.reactiverUser(user);
+			Map<String, Object> response = new HashMap<>();
+			response.put("message", "user account reactivated successfully");
+			return ResponseEntity.ok(response);  // Send JSON response
+		} catch (Exception e) {
+			Map<String, Object> response = new HashMap<>();
+			response.put("error", "Failed to reactivate user account: " + e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);  // Send JSON response
+		}
+	}
+
+
+
+
+
 
 
 

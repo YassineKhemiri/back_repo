@@ -5,6 +5,7 @@ import com.javachinna.model.CountType;
 import com.javachinna.model.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ContratService {
 
@@ -19,6 +20,9 @@ public interface ContratService {
 
     public List<CountType> getPercentageGroupByBranche();
     public String createPaymentSession(Long contratId) throws Exception;
+
+    Map<String, Long> getContratCountByProduit();
+
    /*  public void handlePaymentSuccess(String sessionId);
    public String createPaymentSession(Long contratId, Long userId, String signature) throws Exception;*/
 }

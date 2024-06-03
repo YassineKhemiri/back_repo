@@ -91,6 +91,19 @@ public class UserServiceImpl implements UserService {
 		return userRepository.existsByNum(num);
 	}
 
+	@Override
+	public void desactiverUser(User user) {
+		user.setEnabled(false);
+		user.setVerified((byte)3);
+		userRepository.save(user);
+	}
+
+	@Override
+	public void reactiverUser(User user) {
+		user.setEnabled(true);
+		user.setVerified((byte)2);
+		userRepository.save(user);
+	}
 
 
 	private User buildUser(final SignUpRequest formDTO) {
@@ -171,7 +184,7 @@ public class UserServiceImpl implements UserService {
 	}*/
 
 	private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
-		existingUser.setDisplayName(oAuth2UserInfo.getName());
+		existingUser.setNom(oAuth2UserInfo.getName());
 		return userRepository.save(existingUser);
 	}
 
@@ -218,8 +231,7 @@ public class UserServiceImpl implements UserService {
 		}
 		if (user.getVerified() == 1) {
 			user.setEnabled(true);
-			user.setVerified((byte) 2);  // Email verified, update status
-
+			user.setVerified((byte)2);  // Email verified, update status
 		}
 
 
@@ -227,4 +239,6 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 		return AppConstants.TOKEN_VALID;
 	}
+
+
 }

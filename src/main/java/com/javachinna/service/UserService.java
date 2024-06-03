@@ -49,5 +49,9 @@ public interface UserService {
 
 	boolean existbynum(String num);
 
+	void desactiverUser(User user);
+
+	void reactiverUser(User user);
+
 
 }

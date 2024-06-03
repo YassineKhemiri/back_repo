@@ -21,8 +21,20 @@ public class Contrat {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "BRANCHE_ID", nullable = true)
+    @JoinColumn(name = "BRANCHE_ID", nullable = false)
     private Branche branche;
+
+    @ManyToOne
+    @JoinColumn(name = "PRODUIT_ID", nullable = false)
+    private Produit produit;
+
+    @ManyToOne
+    @JoinColumn(name = "GARANTIE_ID", nullable = false)
+    private Garanties garantie;
+
+    @ManyToOne
+    @JoinColumn(name = "EXCLUSION_ID", nullable = false)
+    private Exclusions exclusion;
 
     @Column
     private String Referencement;
@@ -30,8 +42,8 @@ public class Contrat {
     @Column
     private String numContrat;
 
-@Column
-private Long prix;
+     @Column
+     private Long prix;
     @Temporal(TemporalType.TIMESTAMP)
     private Date date_effet;
 

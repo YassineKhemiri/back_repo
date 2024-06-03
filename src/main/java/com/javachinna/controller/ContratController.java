@@ -73,4 +73,9 @@ public class ContratController {
             return ResponseEntity.status(500).body("Payment processing error: " + e.getMessage());
         }
     }
+
+    @GetMapping("/countByProduit")
+    public ResponseEntity<Map<String, Long>> getCountByProduit() {
+        return ResponseEntity.ok(contratService.getContratCountByProduit());
+    }
 }
